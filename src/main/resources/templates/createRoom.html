@@ -10,13 +10,13 @@
 <button onclick="createChatRoom()">채팅방 생성</button>
 </body>
 <script type="module">
-    import { db } from '/js/firebase-config.js';
-    import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
+    import {db} from './js/firebase-config.js';
+    import {collection, addDoc, query, orderBy, onSnapshot, serverTimestamp}
         from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
     const currentUser = sessionStorage.getItem("username");
 
-    window.createChatRoom = async function() {
+    window.createChatRoom = async function () {
         const roomName = document.getElementById('roomNameInput').value;
         const participantsStr = document.getElementById('participantsInput').value;
 
@@ -50,10 +50,11 @@
 
             console.log("채팅방 생성 성공, ID:", docRef.id);
             alert("채팅방이 생성되었습니다!");
-            window.location.href = `/chat/${docRef.id}
+            window.location.href = `/chat/${docRef.id}`;
         } catch (error) {
             console.error("채팅방 생성 중 오류 발생:", error);
         }
     }
+
 </script>
 </html>
