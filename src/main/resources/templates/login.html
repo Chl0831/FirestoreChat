@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<h3>로그인</h3>
+
+<form id="loginForm">
+    <div>
+        <input type="text" id="username" name="username" placeholder="username">
+    </div>
+    <div>
+        <input type="password" id="password" name="password" placeholder="password">
+    </div>
+    <button type="submit">로그인</button>
+</form>
+
+</body>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const response = await axios.post('/api/auth/login', {
+        username: username,
+        password: password
+      });
+
+      // 로그인 성공 시 사용자 정보를 세션스토리지에 저장
+      sessionStorage.setItem('username', username);
+
+      // 채팅 페이지로 리다이렉트
+      window.location.href = '/myChat-list.html';
+    } catch (error) {
+      alert(error.response?.data || '로그인 실패 : '+error);
+    }
+  });
+</script>
+</html>

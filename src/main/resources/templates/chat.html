@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Firebase Chat</title>
+<!--    <script type="module" src="/js/firebase-config.js"></script>-->
+    <style>
+        #chatBox {
+            width: 400px;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>실시간 채팅</h1>
+<div id="chatBox"></div>
+<div>
+    <input type="text" id="messageInput" placeholder="메시지를 입력하세요">
+    <button class="send-button" onclick="handleClick()">전송</button>
+</div>
+</body>
+<script type="module">
+    import { db } from './js/firebase-config.js';
+    import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
+        from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+    const username = sessionStorage.getItem('username');
+
+    // 메시지 보내기
+    async function sendMessage() {
+
+        const messageInput = document.getElementById('messageInput').value;
+
+        if (messageInput.trim() === '') return;
+
+        try {
+            await addDoc(collection(db, "messages"), {
+                sender: username,
+                text: messageInput,
+                timestamp: serverTimestamp()
+            });
+
+            document.getElementById('messageInput').value = '';
+        } catch (error) {
+            console.log('메시지 전송 실패:', error);
+        }
+    }
+
+    // 실시간 연동
+    function subscribeToMessages() {
+        const q = query(collection(db, "messages"), orderBy("timestamp"));
+
+        onSnapshot(q, (snapshot) => {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const message = doc.data();
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = message.text;
+                chatBox.appendChild(messageDiv);
+            });
+        });
+    }
+
+    window.onload = function () {
+        subscribeToMessages();
+    }
+
+    window.handleClick = function() {
+        sendMessage();
+    }
+</script>
+</html>
