@@ -2,7 +2,9 @@ package com.example.minipawschat.controller;
 
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -21,8 +23,9 @@ public class ViewController {
         return "login";
     }
 
-    @GetMapping("/chat/{R}")
-    public String chat() {
+    @GetMapping("/chat/{roomId}")
+    public String chatRoom(@PathVariable String roomId, Model model) {
+        model.addAttribute("roomId", roomId);
         return "chat";
     }
 

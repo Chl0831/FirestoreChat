@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
  * Created on 2025-01-24 by 최윤서
  */
 @Entity
-@Table(name = "tbl_user0124")
+@Table(name = "user")
 @Data
 public class User {
     @Id

@@ -37,7 +37,7 @@
         if (messageInput.trim() === '') return;
 
         try {
-            await addDoc(collection(db, "messages"), {
+            await addDoc(collection(db,  `chatRooms/${roomId}/messages`), {
                 sender: username,
                 text: messageInput,
                 timestamp: serverTimestamp()
@@ -49,19 +49,31 @@
         }
     }
 
-    // 실시간 연동
+    // 실시간 메시지 구독
     function subscribeToMessages() {
-        const q = query(collection(db, "messages"), orderBy("timestamp"));
+        const q = query(collection(db, `chatRooms/${roomId}/messages`), orderBy("timestamp"));
 
         onSnapshot(q, (snapshot) => {
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = '';
+            chatBox.innerHTML = ''; // 기존 메시지 초기화
+
             snapshot.forEach((doc) => {
                 const message = doc.data();
                 const messageDiv = document.createElement('div');
-                messageDiv.textContent = message.text;
+
+                // 메시지를 사용자 구분하여 출력
+                if (message.sender === username) {
+                    messageDiv.style.color = 'blue';  // 본인 메시지는 파란색
+                    messageDiv.textContent = `[나] ${message.text}`;
+                } else {
+                    messageDiv.style.color = 'green';  // 상대 메시지는 초록색
+                    messageDiv.textContent = `${message.sender}: ${message.text}`;
+                }
+
                 chatBox.appendChild(messageDiv);
             });
+
+            chatBox.scrollTop = chatBox.scrollHeight; // 자동 스크롤 다운
         });
     }
 
