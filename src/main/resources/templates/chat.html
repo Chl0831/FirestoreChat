@@ -23,10 +23,11 @@
 </div>
 </body>
 <script type="module">
-    import { db } from './js/firebase-config.js';
+    import { db } from '/js/firebase-config.js';  // 절대 경로 적용
     import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
         from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
+    const roomId = document.body.getAttribute('data-room-id');
     const username = sessionStorage.getItem('username');
 
     // 메시지 보내기
@@ -37,7 +38,7 @@
         if (messageInput.trim() === '') return;
 
         try {
-            await addDoc(collection(db,  `chatRooms/${roomId}/messages`), {
+            await addDoc(collection(db, `chatRooms/${roomId}/messages`), {
                 sender: username,
                 text: messageInput,
                 timestamp: serverTimestamp()
