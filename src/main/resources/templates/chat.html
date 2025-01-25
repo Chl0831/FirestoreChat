@@ -27,7 +27,7 @@
     import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
         from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-    const roomId = document.body.getAttribute('data-room-id');
+    const roomId = "[[${roomId}]]";
     const username = sessionStorage.getItem('username');
 
     // 메시지 보내기
