@@ -33,31 +33,9 @@ public class FirebaseService {
 
     }
 
-    public void getMessages(String roomId) throws ExecutionException, InterruptedException {
-        QuerySnapshot snapshot = firestore.collection("chatRooms").document(roomId)
-                .collection("messages").orderBy("timestamp").get().get();
-        //orderBy("timestamp") : 메시지를 시간 순으로 정렬하여 가지고 옴
-
-        for (QueryDocumentSnapshot document : snapshot) {
-            System.out.println("Sender: " + document.getString("sender"));
-            System.out.println("Message: " + document.getString("text"));
-            System.out.println("Time: " + document.getLong("timestamp"));
-        }
-    }
-
-    //실시간 연동 -> js로 옮겨야함.
-//    public void listenForNewMessages(String roomId) throws ExecutionException, InterruptedException {
-//        firestore.collection("chatRooms").document(roomId)
-//                .collection("messages").addSnapshotListener((snapshot, e) -> {
-//                    if (e != null) {
-//                        System.out.println("리스너 오류 : "+e.getMessage());
-//                        return;
-//                    }
-//
-//                    for (QueryDocumentSnapshot document : snapshot) {
-//                        System.out.println("새메시지: " + document.getString("text"));
-//                    }
-//                });
+//    public void addCalender(String roomId, String sender, String text) {
+//        Map<String, Object> calender = new HashMap<>();
 //    }
+
 
 }

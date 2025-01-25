@@ -1,11 +1,9 @@
 package com.example.minipawschat.controller;
 
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created on 2025-01-24 by 최윤서
@@ -29,9 +27,9 @@ public class ViewController {
         return "chat";
     }
 
-    @GetMapping("/myChat-list.html")
+    @GetMapping("/myChat")
     public String myChatList() {
-        return "myChat-list";
+        return "myChat";
     }
 
     @GetMapping("/createRoom")

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>채팅방 목록</h2>
+<button><a href="/createRoom">채팅방 추가하기</a></button>
+<div id="chatList"></div>
+</body>
+<script type="module">
+    import { db } from './js/firebase-config.js';
+    import { collection, query, where, getDocs }
+        from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+    // 현재 로그인한 사용자 가져오기
+    const currentUser = sessionStorage.getItem("username");
+    const chatListElement = document.getElementById("chatList");
+
+    async function subscribeToNotifications() {
+        if (!currentUser) {
+            console.error("사용자 정보가 없습니다. 로그인 후 이용해 주세요.");
+            return;
+        }
+
+        try {
+            // Firestore에서 'participants' 배열에 사용자가 포함된 채팅방 가져오기
+            const chatRoomsRef = collection(db, 'chatRooms');
+            const q = query(chatRoomsRef, where('participants', 'array-contains', currentUser));
+
+            // Firestore 쿼리 실행
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                chatListElement.innerHTML = "<li>참여 중인 채팅방이 없습니다.</li>";
+            } else {
+                chatListElement.innerHTML = "";  // 기존 목록 초기화
+
+                querySnapshot.forEach((doc) => {
+                    const chatRoom = doc.data();
+                    const listItem = document.createElement("li");
+
+                    listItem.innerHTML = `
+                    <a href="/chat/${doc.id}">${chatRoom.roomName}</a>
+                `;
+
+                    chatListElement.appendChild(listItem);
+                });
+            }
+        } catch (error) {
+            console.error("채팅방 목록 가져오기 실패:", error);
+        }
+    }
+
+    // 함수 호출 (페이지 로드 시 실행)
+    subscribeToNotifications();
+
+
+</script>
+</html>
