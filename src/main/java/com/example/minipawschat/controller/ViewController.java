@@ -21,7 +21,7 @@ public class ViewController {
         return "login";
     }
 
-    @GetMapping("/chat")
+    @GetMapping("/chat/{R}")
     public String chat() {
         return "chat";
     }
@@ -35,4 +35,5 @@ public class ViewController {
     public String createRoom() {
         return "createRoom";
     }
+
 }
